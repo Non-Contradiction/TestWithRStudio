@@ -1,0 +1,34 @@
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
+
+language: R
+sudo: required
+
+before_install:
+
+  - curl -fLo /tmp/rstudio.deb https://download1.rstudio.org/rstudio-1.0.153-amd64.deb
+  - sudo apt-get install gdebi-core
+  - sudo gdebi  --non-interactive /tmp/rstudio.deb
+  - rm /tmp/rstudio.deb
+
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
+
+  - mkdir -p mkdir $HOME/R/library
+  - echo 'R_LIBS_USER="~/R/library"' >  $HOME/.Renviron
+  - Rscript -e 'install.packages("inline", repos="http://cran.rstudio.com/")'
+  - Rscript -e 'install.packages("testthat", repos="http://cran.rstudio.com/")'
+  - Rscript -e 'install.packages("rstudioapi", repos="http://cran.rstudio.com/")'
+
+  #- Rscript -e 'sessionInfo()'
+  #- julia -e 'versioninfo()'
+  #- julia -e 'Pkg.add("RCall")'
+  #- R RHOME
+  #- julia -e 'println(readchomp(`R RHOME`))'
+  #- julia -e 'Rhome = readchomp(`R RHOME`); libR_dir = joinpath(Rhome,"lib"); libR = joinpath(Rhome,"lib","libR.$(Libdl.dlext)"); println(Rhome); println(isdir(Rhome)); println(libR_dir); println(isdir(libR_dir)); println(libR); println(isfile(libR)); println(Libdl.dlopen_e(libR))'
+  #- ls $(R RHOME)
+  #- ls $(R RHOME)/lib
+  #- julia -e 'using RCall'
+script:
+- R CMD build .
+- R CMD check *tar.gz
