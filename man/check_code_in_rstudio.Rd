@@ -15,8 +15,8 @@ check_code_in_rstudio(code, time = 10)
 \code{check_code_in_rstudio} checks whether the code crash RStudio or not.
 }
 \examples{
-testthat::expect_true(check_code_in_rstudio("1"))
-testthat::expect_false(check_code_in_rstudio("q()"))
-testthat::expect_false(check_code_in_rstudio("library(TestWithRStudio); crash()"))
+stopifnot(check_code_in_rstudio("1"))
+stopifnot(!check_code_in_rstudio("q()"))
+stopifnot(!check_code_in_rstudio("library(TestWithRStudio); crash()"))
 
 }

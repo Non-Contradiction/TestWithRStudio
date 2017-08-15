@@ -36,9 +36,9 @@ start_rstudio_and_inject_code <- function(code){
 #' @param time the time for the testing
 #'
 #' @examples
-#' testthat::expect_true(check_code_in_rstudio("1"))
-#' testthat::expect_false(check_code_in_rstudio("q()"))
-#' testthat::expect_false(check_code_in_rstudio("library(TestWithRStudio); crash()"))
+#' stopifnot(check_code_in_rstudio("1"))
+#' stopifnot(!check_code_in_rstudio("q()"))
+#' stopifnot(!check_code_in_rstudio("library(TestWithRStudio); crash()"))
 #'
 #' @export
 check_code_in_rstudio <- function(code, time = 10){
@@ -57,7 +57,7 @@ check_code_in_rstudio <- function(code, time = 10){
 #' \code{check__rstudio} checks whether RStudio is available or not.
 #'
 #' @examples
-#' testthat::expect_true(check_rstudio())
+#' stopifnot(check_rstudio())
 #'
 #' @export
 check_rstudio <- function(){

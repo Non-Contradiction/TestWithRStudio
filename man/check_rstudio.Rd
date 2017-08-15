@@ -10,6 +10,6 @@ check_rstudio()
 \code{check__rstudio} checks whether RStudio is available or not.
 }
 \examples{
-testthat::expect_true(check_rstudio())
+stopifnot(check_rstudio())
 
 }
