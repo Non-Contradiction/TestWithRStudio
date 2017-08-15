@@ -22,7 +22,7 @@ start_and_get_pid <- function(cmd){
 }
 
 start_rstudio_and_inject_code <- function(code){
-    folder <- "/tmp"
+    folder <- tempdir()
     create_proj(folder)
     inject_code(code, paste0(folder, "/Rproj/.Rprofile"))
     start_and_get_pid(paste0("rstudio ", paste0(folder, "/Rproj/Rproj.Rproj")))
@@ -30,13 +30,15 @@ start_rstudio_and_inject_code <- function(code){
 
 #' Check whether the code crash RStudio or not.
 #'
-#' \code{check_code-in_rstudio} checks whether the code crash RStudio or not.
+#' \code{check_code_in_rstudio} checks whether the code crash RStudio or not.
 #'
 #' @param code the code you want to test in RStudio
 #' @param time the time for the testing
 #'
 #' @examples
-#' check_code_in_rstudio("1", 1)
+#' testthat::expect_true(check_code_in_rstudio("1"))
+#' testthat::expect_false(check_code_in_rstudio("q()"))
+#' testthat::expect_false(check_code_in_rstudio("library(TestWithRStudio); crash()"))
 #'
 #' @export
 check_code_in_rstudio <- function(code, time = 10){
@@ -49,3 +51,21 @@ check_code_in_rstudio <- function(code, time = 10){
     system(paste0("kill ", pid))
     after > before
 }
+
+#' Check whether RStudio is available or not.
+#'
+#' \code{check__rstudio} checks whether RStudio is available or not.
+#'
+#' @examples
+#' testthat::expect_true(check_rstudio())
+#'
+#' @export
+check_rstudio <- function(){
+    pid <- start_rstudio_and_inject_code("")
+    Sys.sleep(1)
+    r <- no_of_rsession() > 0
+    # print(pid)
+    system(paste0("kill ", pid))
+    r
+}
+

@@ -12,9 +12,11 @@ check_code_in_rstudio(code, time = 10)
 \item{time}{the time for the testing}
 }
 \description{
-\code{check_code-in_rstudio} checks whether the code crash RStudio or not.
+\code{check_code_in_rstudio} checks whether the code crash RStudio or not.
 }
 \examples{
-check_code_in_rstudio("1", 1)
+testthat::expect_true(check_code_in_rstudio("1"))
+testthat::expect_false(check_code_in_rstudio("q()"))
+testthat::expect_false(check_code_in_rstudio("library(TestWithRStudio); crash()"))
 
 }
