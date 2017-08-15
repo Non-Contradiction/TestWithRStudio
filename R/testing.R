@@ -21,7 +21,7 @@ start_and_get_pid <- function(cmd){
 }
 
 start_rstudio_and_inject_code <- function(code){
-    folder <- "/tmp"
+    folder <- tempdir()
     create_proj(folder)
     inject_code(code, paste0(folder, "/Rproj/.Rprofile"))
     start_and_get_pid(paste0("rstudio ", paste0(folder, "/Rproj/Rproj.Rproj")))
