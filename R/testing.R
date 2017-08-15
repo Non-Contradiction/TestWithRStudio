@@ -23,10 +23,10 @@ inject <- function(code, folder){
 #'
 #' @export
 inject_into_rstudio <- function(code){
-    folder = "/tmp"
+    folder = tempdir()
     create_proj(folder)
     inject(code, folder)
-    system(paste0("rstudio ", paste0(folder, "/Rproj/Rproj.Rproj")), wait = FALSE)
+    system(paste0("rstudio ", paste0(folder, "/Rproj/Rproj.Rproj & echo $!")), wait = FALSE)
 }
 
 #' Check whether the code crash RStudio or not.
