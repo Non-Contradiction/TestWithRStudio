@@ -7,9 +7,9 @@
 check_rstudio()
 }
 \description{
-\code{check__rstudio} checks whether RStudio is available or not.
+\code{check_rstudio} checks whether RStudio is available or not.
 }
 \examples{
-stopifnot(check_rstudio())
+check_rstudio()
 
 }

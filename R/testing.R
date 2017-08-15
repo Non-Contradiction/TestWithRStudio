@@ -36,12 +36,11 @@ start_rstudio_and_inject_code <- function(code){
 #' @param time the time for the testing
 #'
 #' @examples
-#' stopifnot(check_code_in_rstudio("1"))
-#' stopifnot(!check_code_in_rstudio("q()"))
-#' stopifnot(!check_code_in_rstudio("library(TestWithRStudio); crash()"))
+#' check_code_in_rstudio("1")
 #'
 #' @export
 check_code_in_rstudio <- function(code, time = 10){
+    Sys.sleep(time)
     before <- no_of_rsession()
     pid <- start_rstudio_and_inject_code(code)
     stopifnot(length(pid) == 1)
@@ -54,10 +53,10 @@ check_code_in_rstudio <- function(code, time = 10){
 
 #' Check whether RStudio is available or not.
 #'
-#' \code{check__rstudio} checks whether RStudio is available or not.
+#' \code{check_rstudio} checks whether RStudio is available or not.
 #'
 #' @examples
-#' stopifnot(check_rstudio())
+#' check_rstudio()
 #'
 #' @export
 check_rstudio <- function(){
