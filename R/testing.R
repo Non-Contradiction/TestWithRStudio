@@ -1,16 +1,5 @@
-check_rsession <- function(){
-    tt <- 'if pgrep -x "rsession" > /dev/null
-           then
-               echo "Running"
-           else
-               echo "Stopped"
-           fi'
-
-    system(tt, intern = TRUE) == "Running"
-}
-
-move <- function(from, dest){
-    system(paste0("cp -R ", from, " ", dest))
+no_of_rsession <- function(){
+    eval(parse(text = system("pgrep rsession| wc -l", intern = TRUE)[1]))
 }
 
 create_proj <- function(folder){
@@ -45,12 +34,16 @@ inject_into_rstudio <- function(code){
 #' \code{check_code-in_rstudio} checks whether the code crash RStudio or not.
 #'
 #' @param code the code you want to test in RStudio
+#' @param time the time for the testing
 #'
 #' @examples
 #' check_code_in_rstudio("1")
 #'
 #' @export
-check_code_in_rstudio <- function(code){
+check_code_in_rstudio <- function(code, time = 60){
+    before <- no_of_rsession()
     inject_into_rstudio(code)
-    check_rsession()
+    Sys.sleep(time)
+    after <- no_of_rsession()
+    after > before
 }
