@@ -24,7 +24,6 @@ start_and_get_pid <- function(cmd){
 start_rstudio_and_inject_code <- function(code){
     folder <- "/tmp"
     create_proj(folder)
-    stopifnot(dir.exists(paste0(folder, "/Rproj")))
     inject_code(code, paste0(folder, "/Rproj/.Rprofile"))
     start_and_get_pid(paste0("rstudio ", paste0(folder, "/Rproj/Rproj.Rproj")))
 }
@@ -37,10 +36,10 @@ start_rstudio_and_inject_code <- function(code){
 #' @param time the time for the testing
 #'
 #' @examples
-#' check_code_in_rstudio("1")
+#' check_code_in_rstudio("1", 1)
 #'
 #' @export
-check_code_in_rstudio <- function(code, time = 20){
+check_code_in_rstudio <- function(code, time = 10){
     before <- no_of_rsession()
     pid <- start_rstudio_and_inject_code(code)
     stopifnot(length(pid) == 1)

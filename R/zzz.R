@@ -1,19 +1,19 @@
-.crash <- new.env(parent = emptyenv())
-
-#' Do initial setup for the TestWithRStudio package.
+#' Crash, an example to crash the rsession.
 #'
-#' \code{setup} does the initial setup for the TestWithRStudio package.
+#' \code{crash} crashes the rsession.
 #'
 #' @examples
-#' crash <- setup()
+#' \dontrun{
+#' crash()
+#' }
 #'
 #' @export
-setup <- function(){
-    .crash$crash <- inline::cfunction(
+crash <- function(){
+    .crash <- inline::cfunction(
         sig = c(),
         body = "
         return (SEXP)1;"
         )
 
-    .crash
+    .crash()
 }
