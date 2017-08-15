@@ -42,11 +42,15 @@ start_rstudio_and_inject_code <- function(code){
 check_code_in_rstudio <- function(code, time = 10){
     Sys.sleep(time)
     before <- no_of_rsession()
+    message(paste0("There are currently ", before, " rsessions running."))
     pid <- start_rstudio_and_inject_code(code)
     stopifnot(length(pid) == 1)
+    message(paste0("Start a new RStudio process with pid = ", pid))
     # print(pid)
     Sys.sleep(time)
     after <- no_of_rsession()
+    message(paste0("After running the code, and wait ", time, " seconds,
+                   there are currently ", after, " rsessions running."))
     system(paste0("kill ", pid))
     after > before
 }
@@ -61,7 +65,7 @@ check_code_in_rstudio <- function(code, time = 10){
 #' @export
 check_rstudio <- function(){
     pid <- start_rstudio_and_inject_code("")
-    Sys.sleep(1)
+    Sys.sleep(5)
     r <- no_of_rsession() > 0
     # print(pid)
     system(paste0("kill ", pid))
