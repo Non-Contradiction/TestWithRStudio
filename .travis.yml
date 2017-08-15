@@ -29,7 +29,7 @@ before_install:
 script:
 - R CMD build .
 - R CMD check *tar.gz
-- rscript -e "library(TestWithRStudio); stopifnot(check_rstudio())"
-- rscript -e "library(TestWithRStudio); stopifnot(check_code_in_rstudio('1'))"
-- rscript -e "library(TestWithRStudio); stopifnot(!check_code_in_rstudio('q()'))"
-- rscript -e "library(TestWithRStudio); stopifnot(!check_code_in_rstudio('library(TestWithRStudio); crash()'))"
+- R -e "library(TestWithRStudio); stopifnot(check_rstudio())"
+- R -e "library(TestWithRStudio); stopifnot(check_code_in_rstudio('1'))"
+- R -e "library(TestWithRStudio); stopifnot(!check_code_in_rstudio('q()'))"
+- R -e "library(TestWithRStudio); stopifnot(!check_code_in_rstudio('library(TestWithRStudio); crash()'))"
