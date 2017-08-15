@@ -12,6 +12,12 @@ inject <- function(code, folder){
     writeLines(code, paste0(folder, "/Rproj/.Rprofile"))
 }
 
+start_and_get_pid <- function(cmd){
+    pidfile <- tempfile()
+    system(paste0(cmd, " & echo $! > ", pidfile), wait = FALSE)
+    readLines(pidfile)
+}
+
 #' Start a new RStudio process and "inject" some codes into it.
 #'
 #' \code{inject_into_rstudio} start a new RStudio process and "inject" some codes into it.
@@ -19,14 +25,14 @@ inject <- function(code, folder){
 #' @param code the code you want to inject into RStudio
 #'
 #' @examples
-#' inject_into_rstudio("1")
+#' pid <- inject_into_rstudio("1")
 #'
 #' @export
 inject_into_rstudio <- function(code){
     folder = tempdir()
     create_proj(folder)
     inject(code, folder)
-    system(paste0("rstudio ", paste0(folder, "/Rproj/Rproj.Rproj & echo $!")), wait = FALSE)
+    start_and_get_pid(paste0("rstudio ", paste0(folder, "/Rproj/Rproj.Rproj")))
 }
 
 #' Check whether the code crash RStudio or not.
@@ -40,10 +46,11 @@ inject_into_rstudio <- function(code){
 #' check_code_in_rstudio("1")
 #'
 #' @export
-check_code_in_rstudio <- function(code, time = 60){
+check_code_in_rstudio <- function(code, time = 30){
     before <- no_of_rsession()
-    inject_into_rstudio(code)
+    pid <- inject_into_rstudio(code)
     Sys.sleep(time)
     after <- no_of_rsession()
+    system(paste0("kill ", pid))
     after > before
 }
