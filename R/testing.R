@@ -7,14 +7,16 @@ create_proj <- function(folder){
               recursive = TRUE)
 }
 
-inject <- function(code, folder){
-    file.create(paste0(folder, "/Rproj/.Rprofile"))
-    writeLines(code, paste0(folder, "/Rproj/.Rprofile"))
+inject_code <- function(code, Rprofile){
+    file.create(Rprofile)
+    writeLines(code, Rprofile)
 }
 
 start_and_get_pid <- function(cmd){
     pidfile <- tempfile()
+    # print(pidfile)
     system(paste0(cmd, " & echo $! > ", pidfile), wait = FALSE)
+    Sys.sleep(1) ## wait for the content to write into the pidfile
     readLines(pidfile)
 }
 
@@ -29,9 +31,9 @@ start_and_get_pid <- function(cmd){
 #'
 #' @export
 inject_into_rstudio <- function(code){
-    folder = tempdir()
+    folder <- "/tmp"
     create_proj(folder)
-    inject(code, folder)
+    inject_code(code, paste0(folder, "/Rproj/.Rprofile"))
     start_and_get_pid(paste0("rstudio ", paste0(folder, "/Rproj/Rproj.Rproj")))
 }
 
@@ -49,6 +51,8 @@ inject_into_rstudio <- function(code){
 check_code_in_rstudio <- function(code, time = 30){
     before <- no_of_rsession()
     pid <- inject_into_rstudio(code)
+    stopifnot(length(pid) == 1)
+    # print(pid)
     Sys.sleep(time)
     after <- no_of_rsession()
     system(paste0("kill ", pid))
