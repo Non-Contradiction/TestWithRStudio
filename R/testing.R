@@ -3,8 +3,9 @@ no_of_rsession <- function(){
 }
 
 create_proj <- function(folder){
-    file.copy(from = system.file("Rproj", package = "TestWithRStudio"), to = folder,
-              recursive = TRUE)
+    dir.create(paste0(folder, "/Rproj"), recursive = TRUE)
+    file.create(paste0(folder, "/Rproj/Rproj.Rproj"))
+    writeLines("Version: 1.0", paste0(folder, "/Rproj/Rproj.Rproj"))
 }
 
 inject_code <- function(code, Rprofile){
@@ -23,7 +24,7 @@ start_and_get_pid <- function(cmd){
 start_rstudio_and_inject_code <- function(code){
     folder <- "/tmp"
     create_proj(folder)
-    stopifnot(file.exists(paste0(folder, "/Rproj")))
+    stopifnot(dir.exists(paste0(folder, "/Rproj")))
     inject_code(code, paste0(folder, "/Rproj/.Rprofile"))
     start_and_get_pid(paste0("rstudio ", paste0(folder, "/Rproj/Rproj.Rproj")))
 }
