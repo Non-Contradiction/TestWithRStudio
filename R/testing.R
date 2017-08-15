@@ -20,17 +20,7 @@ start_and_get_pid <- function(cmd){
     readLines(pidfile)
 }
 
-#' Start a new RStudio process and "inject" some codes into it.
-#'
-#' \code{inject_into_rstudio} start a new RStudio process and "inject" some codes into it.
-#'
-#' @param code the code you want to inject into RStudio
-#'
-#' @examples
-#' pid <- inject_into_rstudio("1")
-#'
-#' @export
-inject_into_rstudio <- function(code){
+start_rstudio_and_inject_code <- function(code){
     folder <- "/tmp"
     create_proj(folder)
     inject_code(code, paste0(folder, "/Rproj/.Rprofile"))
@@ -48,9 +38,9 @@ inject_into_rstudio <- function(code){
 #' check_code_in_rstudio("1")
 #'
 #' @export
-check_code_in_rstudio <- function(code, time = 30){
+check_code_in_rstudio <- function(code, time = 20){
     before <- no_of_rsession()
-    pid <- inject_into_rstudio(code)
+    pid <- start_rstudio_and_inject_code(code)
     stopifnot(length(pid) == 1)
     # print(pid)
     Sys.sleep(time)
