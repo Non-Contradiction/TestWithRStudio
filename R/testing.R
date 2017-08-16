@@ -1,5 +1,6 @@
-no_of_rsession <- function(){
-    eval(parse(text = system("pgrep -f rsession| wc -l", intern = TRUE)[1]))
+check_running <- function(pid){
+    r <- system(paste0("kill -s 0 ", pid), intern = TRUE)
+    length(attr(r, "status")) == 0
 }
 
 create_proj <- function(folder){
@@ -24,8 +25,17 @@ start_and_get_pid <- function(cmd){
 start_rstudio_and_inject_code <- function(code){
     folder <- tempdir()
     create_proj(folder)
+    rsession_pidfile <- tempfile()
+    code <- paste0(code, "\n writeLines(deparse(Sys.getpid()+0), '", rsession_pidfile, "')")
     inject_code(code, paste0(folder, "/Rproj/.Rprofile"))
-    start_and_get_pid(paste0("rstudio ", paste0(folder, "/Rproj/Rproj.Rproj")))
+    rstudio_pid <- start_and_get_pid(paste0("rstudio ", paste0(folder, "/Rproj/Rproj.Rproj")))
+    Sys.sleep(1) ## wait for the content to write into the pidfile
+    rsession_pid <- readLines(rsession_pidfile)
+
+    stopifnot(length(rstudio_pid) == 1)
+    stopifnot(length(rsession_pid) == 1)
+
+    list(rstudio = rstudio_pid, rsession = rsession_pid)
 }
 
 #' Check whether the code crash RStudio or not.
@@ -41,17 +51,16 @@ start_rstudio_and_inject_code <- function(code){
 #' @export
 check_code_in_rstudio <- function(code, time = 30){
     Sys.sleep(time)
-    before <- no_of_rsession()
-    message(paste0("There are currently ", before, " rsessions running."))
-    pid <- start_rstudio_and_inject_code(code)
-    stopifnot(length(pid) == 1)
-    message(paste0("Start a new RStudio process with pid = ", pid))
-    # print(pid)
+    r <- start_rstudio_and_inject_code(code)
+    rstudio_pid <- r$rstudio
+    rsession_pid <- r$rsession
+    message(paste0("Start a new RStudio process with pid = ", rstudio_pid))
+    message(paste0("The rsession has pid = ", rsession_pid))
+
     Sys.sleep(time)
-    after <- no_of_rsession()
-    message(paste0("After running the code, and wait ", time, " seconds, there are currently ", after, " rsessions running."))
-    system(paste0("kill ", pid))
-    after > before
+    r <- check_running(rsession_pid)
+    system(paste0("kill ", rstudio_pid))
+    r
 }
 
 #' Check whether RStudio is available or not.
@@ -62,14 +71,4 @@ check_code_in_rstudio <- function(code, time = 30){
 #' check_rstudio()
 #'
 #' @export
-check_rstudio <- function(){
-    pid <- start_rstudio_and_inject_code("")
-    message(paste0("Start a new RStudio process with pid = ", pid))
-    Sys.sleep(5)
-    message(paste0("There are currently ", no_of_rsession(), " rsessions running."))
-    r <- no_of_rsession() > 0
-    # print(pid)
-    system(paste0("kill ", pid))
-    r
-}
-
+check_rstudio <- function() check_code_in_rstudio("")
