@@ -33,7 +33,7 @@ start_rstudio_and_inject_code <- function(code){
 
     message(paste0("Start a new RStudio process with pid = ", rstudio_pid))
 
-    Sys.sleep(1) ## wait for the content to write into the pidfile
+    Sys.sleep(5) ## wait for the content to write into the pidfile
     rsession_pid <- readLines(rsession_pidfile)
 
     message(paste0("The rsession has pid = ", rsession_pid))
