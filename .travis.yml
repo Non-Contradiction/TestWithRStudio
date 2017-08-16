@@ -14,8 +14,8 @@ before_install:
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
 
-  - mkdir -p mkdir $HOME/R/library
-  - echo 'R_LIBS_USER="~/R/library"' >  $HOME/.Renviron
+  #- mkdir -p mkdir $HOME/R/library
+  #- echo 'R_LIBS_USER="~/R/library"' >  $HOME/.Renviron
 
   #- Rscript -e 'sessionInfo()'
   #- julia -e 'versioninfo()'
