@@ -1,5 +1,5 @@
 no_of_rsession <- function(){
-    eval(parse(text = system("pgrep -x 'rsession'| wc -l", intern = TRUE)[1]))
+    eval(parse(text = system("ps aux |grep rsession| wc -l", intern = TRUE)[1])) - 2
 }
 
 create_proj <- function(folder){
