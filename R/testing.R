@@ -27,11 +27,16 @@ start_rstudio_and_inject_code <- function(code){
     create_proj(folder)
     rsession_pidfile <- tempfile()
     # file.create(rsession_pidfile)
-    code <- paste0("writeLines(deparse(Sys.getpid()+0), '", rsession_pidfile, "'); Sys.sleep(1); ", code)
+    code <- paste0("writeLines(deparse(Sys.getpid()+0), '", rsession_pidfile, "'); ", code)
     inject_code(code, paste0(folder, "/Rproj/.Rprofile"))
     rstudio_pid <- start_and_get_pid(paste0("rstudio ", paste0(folder, "/Rproj/Rproj.Rproj")))
+
+    message(paste0("Start a new RStudio process with pid = ", rstudio_pid))
+
     Sys.sleep(1) ## wait for the content to write into the pidfile
     rsession_pid <- readLines(rsession_pidfile)
+
+    message(paste0("The rsession has pid = ", rsession_pid))
 
     stopifnot(length(rstudio_pid) == 1)
     stopifnot(length(rsession_pid) == 1)
@@ -57,8 +62,6 @@ check_code_in_rstudio <- function(code, time = 30){
     r <- start_rstudio_and_inject_code(code)
     rstudio_pid <- r$rstudio
     rsession_pid <- r$rsession
-    message(paste0("Start a new RStudio process with pid = ", rstudio_pid))
-    message(paste0("The rsession has pid = ", rsession_pid))
 
     Sys.sleep(time)
     r <- check_running(rsession_pid)
