@@ -39,7 +39,7 @@ start_rstudio_and_inject_code <- function(code){
 #' check_code_in_rstudio("1")
 #'
 #' @export
-check_code_in_rstudio <- function(code, time = 10){
+check_code_in_rstudio <- function(code, time = 30){
     Sys.sleep(time)
     before <- no_of_rsession()
     message(paste0("There are currently ", before, " rsessions running."))
