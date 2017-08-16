@@ -46,7 +46,9 @@ start_rstudio_and_inject_code <- function(code){
 #' @param time the time for the testing
 #'
 #' @examples
+#' \dontrun{
 #' check_code_in_rstudio("1")
+#' }
 #'
 #' @export
 check_code_in_rstudio <- function(code, time = 30){
@@ -68,7 +70,9 @@ check_code_in_rstudio <- function(code, time = 30){
 #' \code{check_rstudio} checks whether RStudio is available or not.
 #'
 #' @examples
+#' \dontrun{
 #' check_rstudio()
+#' }
 #'
 #' @export
 check_rstudio <- function() check_code_in_rstudio("")

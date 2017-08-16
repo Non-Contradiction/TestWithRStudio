@@ -10,6 +10,8 @@ check_rstudio()
 \code{check_rstudio} checks whether RStudio is available or not.
 }
 \examples{
+\dontrun{
 check_rstudio()
+}
 
 }

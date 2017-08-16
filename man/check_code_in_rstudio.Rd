@@ -4,7 +4,7 @@
 \alias{check_code_in_rstudio}
 \title{Check whether the code crash RStudio or not.}
 \usage{
-check_code_in_rstudio(code, time = 10)
+check_code_in_rstudio(code, time = 30)
 }
 \arguments{
 \item{code}{the code you want to test in RStudio}
@@ -15,6 +15,8 @@ check_code_in_rstudio(code, time = 10)
 \code{check_code_in_rstudio} checks whether the code crash RStudio or not.
 }
 \examples{
+\dontrun{
 check_code_in_rstudio("1")
+}
 
 }
