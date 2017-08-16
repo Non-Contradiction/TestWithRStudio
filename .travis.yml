@@ -35,3 +35,5 @@ script:
 - Rscript -e "library(TestWithRStudio); stopifnot(check_code_in_rstudio('1'))"
 - Rscript -e "library(TestWithRStudio); stopifnot(!check_code_in_rstudio('q()'))"
 - Rscript -e "library(TestWithRStudio); stopifnot(!check_code_in_rstudio('library(TestWithRStudio); crash()'))"
+- Rscript -e "system('rstudio', wait = FALSE)"
+- pgrep rsession
