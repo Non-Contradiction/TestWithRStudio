@@ -37,3 +37,4 @@ script:
 - Rscript -e "library(TestWithRStudio); stopifnot(!check_code_in_rstudio('library(TestWithRStudio); crash()'))"
 - Rscript -e "system('rstudio', wait = FALSE)"
 - pgrep -x 'rsession'
+- sudo pgrep rsession
