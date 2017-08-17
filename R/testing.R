@@ -6,7 +6,7 @@ check_running <- function(pid){
 create_proj <- function(folder){
     dir.create(file.path(folder, "/Rproj"), recursive = TRUE)
     file.create(file.path(folder, "/Rproj/Rproj.Rproj"))
-    writeLines("Version: 0.99", file.path(folder, "/Rproj/Rproj.Rproj"))
+    writeLines("Version: 0.1", file.path(folder, "/Rproj/Rproj.Rproj"))
 }
 
 inject_code <- function(code, Rprofile){
@@ -22,19 +22,21 @@ start_and_get_pid <- function(cmd){
     readLines(pidfile)
 }
 
+get_children_pid <- function(pid){
+    system(paste0("pgrep -P ", pid), intern = TRUE)
+}
+
 start_rstudio_and_inject_code <- function(code){
     folder <- tempdir()
     create_proj(folder)
-    rsession_pidfile <- tempfile()
     # file.create(rsession_pidfile)
-    code <- paste0("message('Rprofile load successfully.'); writeLines(deparse(Sys.getpid()+0), '", rsession_pidfile, "'); ", code)
     inject_code(code, file.path(folder, "/Rproj/.Rprofile"))
     rstudio_pid <- start_and_get_pid(paste0("rstudio ", file.path(folder, "/Rproj/Rproj.Rproj")))
 
     message(paste0("Start a new RStudio process with pid = ", rstudio_pid))
 
     Sys.sleep(1) ## wait for the content to write into the pidfile
-    rsession_pid <- readLines(rsession_pidfile)
+    rsession_pid <- get_children_pid(rstudio_pid)
 
     message(paste0("The rsession has pid = ", rsession_pid))
 

@@ -3,6 +3,9 @@
 language: R
 sudo: required
 
+notifications:
+  email: false
+
 env:
   - RSTUDIO_URL: "https://download1.rstudio.org/rstudio-1.0.153-amd64-debian.tar.gz"
 
