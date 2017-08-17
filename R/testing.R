@@ -23,7 +23,7 @@ start_and_get_pid <- function(cmd){
 }
 
 get_children_pid <- function(pid){
-    system(paste0("pgrep -P ", pid), intern = TRUE)
+    system(paste0("ps -o ppid= -o pid= -A | awk '$1 == ", pid, "{print $2}'"), intern = TRUE)
 }
 
 start_rstudio_and_inject_code <- function(code){
@@ -35,7 +35,7 @@ start_rstudio_and_inject_code <- function(code){
 
     message(paste0("Start a new RStudio process with pid = ", rstudio_pid))
 
-    Sys.sleep(1) ## wait for the content to write into the pidfile
+    Sys.sleep(10) ## wait for the content to write into the pidfile
     rsession_pid <- get_children_pid(rstudio_pid)
 
     message(paste0("The rsession has pid = ", rsession_pid))
