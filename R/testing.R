@@ -6,7 +6,7 @@ check_running <- function(pid){
 create_proj <- function(folder){
     dir.create(file.path(folder, "/Rproj"), recursive = TRUE)
     file.create(file.path(folder, "/Rproj/Rproj.Rproj"))
-    writeLines("Version: 1.0", file.path(folder, "/Rproj/Rproj.Rproj"))
+    writeLines("Version: 0.99", file.path(folder, "/Rproj/Rproj.Rproj"))
 }
 
 inject_code <- function(code, Rprofile){
