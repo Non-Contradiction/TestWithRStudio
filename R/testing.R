@@ -27,7 +27,7 @@ start_rstudio_and_inject_code <- function(code){
     create_proj(folder)
     rsession_pidfile <- tempfile()
     # file.create(rsession_pidfile)
-    code <- paste0("writeLines(deparse(Sys.getpid()+0), '", rsession_pidfile, "'); ", code)
+    code <- paste0("message('Rprofile load successfully.'); writeLines(deparse(Sys.getpid()+0), '", rsession_pidfile, "'); ", code)
     inject_code(code, file.path(folder, "/Rproj/.Rprofile"))
     rstudio_pid <- start_and_get_pid(paste0("rstudio ", file.path(folder, "/Rproj/Rproj.Rproj")))
 
