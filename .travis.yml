@@ -1,6 +1,6 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-language: julia
+# language: julia
 sudo: required
 
 notifications:
@@ -43,7 +43,7 @@ before_install:
   - mkdir -p mkdir $HOME/R/library
   - echo 'R_LIBS_USER="~/R/library"' >  $HOME/.Renviron
   - Rscript -e 'install.packages("inline", repos="http://cran.rstudio.com/")'
-  
+
   - curl -fLo /tmp/rstudio.deb https://download1.rstudio.org/rstudio-1.0.153-amd64.deb
   - sudo apt-get install gdebi-core
   - sudo gdebi  --non-interactive /tmp/rstudio.deb
