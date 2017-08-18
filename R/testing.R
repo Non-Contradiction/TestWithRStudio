@@ -105,7 +105,7 @@ check_in_rstudio <- function(code, time = 20){
     r <- detailed_check_in_rstudio(code, time)
 
     if (length(r$errmsg) > 0) {
-        warning(paste0("There are some errors in your code with the error message ", r$errmsg))
+        warning(paste0("There are some errors in your code with the error message: ", r$errmsg))
     }
 
     if (r$crashed) {
@@ -113,7 +113,7 @@ check_in_rstudio <- function(code, time = 20){
     }
 
     if (!r$finished) {
-        warning("The rsession didn't finish running. Maybe you should consider increasing time.")
+        warning("The code didn't finish running.")
     }
 
     length(r$errmsg) == 0 && !r$crashed && r$finished
@@ -131,5 +131,5 @@ check_in_rstudio <- function(code, time = 20){
 #'
 #' @export
 check_rstudio <- function(){
-    check_in_rstudio("")
+    check_in_rstudio("1")
 }
