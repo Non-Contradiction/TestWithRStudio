@@ -23,11 +23,19 @@ start_and_get_pid <- function(cmd){
 }
 
 start_rstudio_and_inject_code <- function(code){
-    folder <- tempdir()
+    # folder <- tempdir()
+    folder <- "/tmp"
     create_proj(folder)
     rsession_pidfile <- tempfile()
-    # file.create(rsession_pidfile)
-    code <- paste0("writeLines(deparse(Sys.getpid()+0), '", rsession_pidfile, "'); ", code)
+    file.create(rsession_pidfile)
+    rerror_file <- tempfile()
+    file.create(rerror_file)
+    rfinish_file <- tempfile()
+    file.create(rfinish_file)
+    code <- paste0("writeLines(deparse(Sys.getpid()+0), '", rsession_pidfile, "');
+                   options(error = function(){writeLines(geterrmessage(), '", rerror_file, "')});",
+                   code,
+                   "; writeLines('Succeed', '", rfinish_file, "');")
     inject_code(code, file.path(folder, "/Rproj/.Rprofile"))
     rstudio_pid <- start_and_get_pid(paste0("rstudio ", file.path(folder, "/Rproj/Rproj.Rproj")))
 
@@ -41,32 +49,76 @@ start_rstudio_and_inject_code <- function(code){
     stopifnot(length(rstudio_pid) == 1)
     stopifnot(length(rsession_pid) == 1)
 
-    list(rstudio = rstudio_pid, rsession = rsession_pid)
+    list(rstudio = rstudio_pid, rsession = rsession_pid,
+         rerror = rerror_file, rfinish = rfinish_file)
 }
 
-#' Check whether the code crash RStudio or not.
+#' Check the code in RStudio.
 #'
-#' \code{check_code_in_rstudio} checks whether the code crash RStudio or not.
+#' \code{detailed_check_in_rstudio} checks the code in RStudio.
 #'
 #' @param code the code you want to test in RStudio
 #' @param time the time for the testing
 #'
+#' @return a list,
+#'     the component crashed means whether rsession is crashed,
+#'     the component finished means whether the code runs to the end successfully,
+#'     the component errmsg is the error message of the code (if any).
+#'
 #' @examples
 #' \dontrun{
-#' check_code_in_rstudio("1")
+#' detailed_check_in_rstudio("1")
 #' }
 #'
 #' @export
-check_code_in_rstudio <- function(code, time = 20){
+detailed_check_in_rstudio <- function(code, time = 20){
     r <- start_rstudio_and_inject_code(code)
     rstudio_pid <- r$rstudio
     rsession_pid <- r$rsession
 
     Sys.sleep(time)
-    r <- check_running(rsession_pid)
+
+    crashed <- !check_running(rsession_pid)
     system(paste0("kill ", rstudio_pid))
-    r
+    finished <- length(readLines(r$rfinish)) == 1 && readLines(r$rfinish) == "Succeed"
+    errmsg <- readLines(r$rerror)
+
+    list(crashed = crashed, finished = finished, errmsg = errmsg)
 }
+
+#' Check the code in RStudio.
+#'
+#' \code{check_in_rstudio} checks the code in RStudio.
+#'
+#' @param code the code you want to test in RStudio
+#' @param time the time for the testing
+#'
+#' @return whether or not the code runs in RStudio successfully.
+#'
+#' @examples
+#' \dontrun{
+#' check_in_rstudio("1")
+#' }
+#'
+#' @export
+check_in_rstudio <- function(code, time = 20){
+    r <- detailed_check_in_rstudio(code, time)
+
+    if (length(r$errmsg) > 0) {
+        warning(paste0("There are some errors in your code with the error message ", r$errmsg))
+    }
+
+    if (r$crashed) {
+        warning("The rsession is crashed by your code.")
+    }
+
+    if (!r$finished) {
+        warning("The rsession didn't finish running. Maybe you should consider increasing time.")
+    }
+
+    length(r$errmsg) == 0 && !r$crashed && r$finished
+}
+
 
 #' Check whether RStudio is available or not.
 #'
@@ -78,4 +130,6 @@ check_code_in_rstudio <- function(code, time = 20){
 #' }
 #'
 #' @export
-check_rstudio <- function() check_code_in_rstudio("")
+check_rstudio <- function(){
+    check_in_rstudio("")
+}
