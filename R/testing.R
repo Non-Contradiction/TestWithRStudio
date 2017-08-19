@@ -105,7 +105,7 @@ check_in_rstudio <- function(code, time = 20){
     r <- detailed_check_in_rstudio(code, time)
 
     if (length(r$errmsg) > 0) {
-        warning(paste0("There are some errors in your code with the error message: ", r$errmsg))
+        warning(r$errmsg)
     }
 
     if (r$crashed) {
