@@ -33,11 +33,11 @@ start_rstudio_and_inject_code <- function(code){
     rfinish_file <- tempfile()
     file.create(rfinish_file)
     finish_writing <- paste0("writeLines('Succeed', '", rfinish_file, "')")
-    block <- paste0("{", code, "; ", finish_writing, "}")
+    block <- paste0(code, "; ", finish_writing)
     code <- paste0("writeLines(deparse(Sys.getpid()+0), '", rsession_pidfile, "');
                    options(error = function(){writeLines(geterrmessage(), '", rerror_file, "')});
                    library(tcltk2);
-                   tclTaskSchedule(2000,
+                   tclTaskSchedule(3000,
                                    rstudioapi::sendToConsole(\"", block, "\"))")
     inject_code(code, file.path(folder, "/Rproj/.Rprofile"))
     rstudio_pid <- start_and_get_pid(paste0("rstudio ", file.path(folder, "/Rproj/Rproj.Rproj")))
