@@ -1,10 +1,10 @@
 check_running <- function(pid){
-    r <- system(paste0("kill -s 0 ", pid), intern = TRUE)
+    r <- system(paste0("kill -s 0 ", pid), intern = TRUE, ignore.stderr = TRUE, ignore.stdout = TRUE)
     length(attr(r, "status")) == 0
 }
 
 create_proj <- function(folder){
-    dir.create(file.path(folder, "/Rproj"), recursive = TRUE)
+    dir.create(file.path(folder, "/Rproj"), recursive = TRUE, showWarnings = FALSE)
     file.create(file.path(folder, "/Rproj/Rproj.Rproj"))
     writeLines("Version: 1.0", file.path(folder, "/Rproj/Rproj.Rproj"))
 }
@@ -82,7 +82,7 @@ detailed_check_in_rstudio <- function(code, time = 20){
     Sys.sleep(time)
 
     crashed <- !check_running(rsession_pid)
-    system(paste0("kill ", rstudio_pid))
+    system(paste0("kill ", rstudio_pid), ignore.stderr = TRUE)
     finished <- length(readLines(r$rfinish)) == 1 && readLines(r$rfinish) == "Succeed"
     errmsg <- readLines(r$rerror)
 
@@ -108,15 +108,15 @@ check_in_rstudio <- function(code, time = 20){
     r <- detailed_check_in_rstudio(code, time)
 
     if (length(r$errmsg) > 0) {
-        warning(r$errmsg)
+        message(r$errmsg)
     }
 
     if (r$crashed) {
-        warning("The rsession is crashed by your code.")
+        message("The rsession is crashed by your code.")
     }
 
     if (!r$finished) {
-        warning("The code didn't finish running.")
+        message("The code didn't finish running.")
     }
 
     length(r$errmsg) == 0 && !r$crashed && r$finished
