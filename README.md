@@ -3,12 +3,29 @@
 TestWithRStudio for Testing your R Package with RStudio in Continuous Integration
 =================================================================================
 
-[![Travis-CI Build Status](https://travis-ci.org/Non-Contradiction/TestWithRStudio.svg?branch=master)](https://travis-ci.org/Non-Contradiction/TestWithRStudio)
+[![Travis-CI Build Status](https://travis-ci.org/Non-Contradiction/TestWithRStudio.svg?branch=master)](https://travis-ci.org/Non-Contradiction/TestWithRStudio) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/Non-Contradiction/TestWithRStudio?branch=master&svg=true)](https://ci.appveyor.com/project/Non-Contradiction/TestWithRStudio)
 
-Why do we need `TestWithRStudio`?
----------------------------------
+Why do we need TestWithRStudio?
+-------------------------------
 
-As an R package developer, have you met the situation that your package passes `R CMD check` but crashes RStudio? `TestWithRStudio` can help you deal with this situation by testing your R package with RStudio using continuous integration like Travis CI.
+<table>
+<colgroup>
+<col width="49%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Oh, no!!!!!</th>
+<th>What's wrong this time!!</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><img src="README/crash.png" /></td>
+<td>As an R package developer, have you met the situation that your package passes <code>R CMD check</code> but crashes RStudio? <code>TestWithRStudio</code> can help you deal with this situation by testing your R package with RStudio using continuous integration like Travis CI.</td>
+</tr>
+</tbody>
+</table>
 
 Installation
 ------------
@@ -26,13 +43,13 @@ Basic Usage
 library(TestWithRStudio)
 
 check_rstudio()
-#> Start a new RStudio process with pid = 36777
-#> The rsession has pid = 36787
+#> Start a new RStudio process with pid = 44204
+#> The rsession has pid = 44214
 #> [1] TRUE
 
 detailed_check_in_rstudio("1")
-#> Start a new RStudio process with pid = 36814
-#> The rsession has pid = 36824
+#> Start a new RStudio process with pid = 44242
+#> The rsession has pid = 44252
 #> $crashed
 #> [1] FALSE
 #> 
@@ -43,9 +60,9 @@ detailed_check_in_rstudio("1")
 #> character(0)
 
 detailed_check_in_rstudio("q()")
-#> Start a new RStudio process with pid = 36853
-#> The rsession has pid = 36863
-#> Warning: 运行命令'kill -s 0 36863 2>/dev/null'的状态是1
+#> Start a new RStudio process with pid = 44280
+#> The rsession has pid = 44290
+#> Warning: 运行命令'kill -s 0 44290 >/dev/null 2>/dev/null'的状态是1
 #> $crashed
 #> [1] TRUE
 #> 
@@ -55,21 +72,9 @@ detailed_check_in_rstudio("q()")
 #> $errmsg
 #> character(0)
 
-detailed_check_in_rstudio("stop('This is an error!!')")
-#> Start a new RStudio process with pid = 36891
-#> The rsession has pid = 36901
-#> $crashed
-#> [1] FALSE
-#> 
-#> $finished
-#> [1] FALSE
-#> 
-#> $errmsg
-#> [1] "错误: This is an error!!" ""
-
 detailed_check_in_rstudio("doesntexist()")
-#> Start a new RStudio process with pid = 36928
-#> The rsession has pid = 36938
+#> Start a new RStudio process with pid = 44319
+#> The rsession has pid = 44329
 #> $crashed
 #> [1] FALSE
 #> 
@@ -81,9 +86,9 @@ detailed_check_in_rstudio("doesntexist()")
 #> [2] ""
 
 detailed_check_in_rstudio("library(TestWithRStudio); crash()")
-#> Start a new RStudio process with pid = 36965
-#> The rsession has pid = 36975
-#> Warning: 运行命令'kill -s 0 36975 2>/dev/null'的状态是1
+#> Start a new RStudio process with pid = 44358
+#> The rsession has pid = 44368
+#> Warning: 运行命令'kill -s 0 44368 >/dev/null 2>/dev/null'的状态是1
 #> $crashed
 #> [1] TRUE
 #> 

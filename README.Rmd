@@ -7,13 +7,13 @@ output: github_document
 # TestWithRStudio for Testing your R Package with RStudio in Continuous Integration
     
 [![Travis-CI Build Status](https://travis-ci.org/Non-Contradiction/TestWithRStudio.svg?branch=master)](https://travis-ci.org/Non-Contradiction/TestWithRStudio)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/Non-Contradiction/TestWithRStudio?branch=master&svg=true)](https://ci.appveyor.com/project/Non-Contradiction/TestWithRStudio)
 
-## Why do we need `TestWithRStudio`?
+## Why do we need TestWithRStudio?
 
-As an R package developer, have you met the situation that your package
-passes `R CMD check` but crashes RStudio?
-`TestWithRStudio` can help you deal with this situation by testing your R package with
-RStudio using continuous integration like Travis CI.
+| Oh, no!!!!! | What's wrong this time!! |
+|---------------------------------------|----------------------------------------|
+|![](README/crash.png)| As an R package developer, have you met the situation that your package passes `R CMD check` but crashes RStudio? `TestWithRStudio` can help you deal with this situation by testing your R package with RStudio using continuous integration like Travis CI.|
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
@@ -31,7 +31,7 @@ devtools::install_github("Non-Contradiction/TestWithRStudio")
 ```
 
 ## Basic Usage
-```{r}
+```{r, cache=TRUE}
 library(TestWithRStudio)
 
 check_rstudio()
@@ -39,8 +39,6 @@ check_rstudio()
 detailed_check_in_rstudio("1")
 
 detailed_check_in_rstudio("q()")
-
-detailed_check_in_rstudio("stop('This is an error!!')")
 
 detailed_check_in_rstudio("doesntexist()")
 
