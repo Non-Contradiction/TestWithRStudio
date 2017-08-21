@@ -44,15 +44,6 @@ start_rstudio_and_inject_code <- function(code){
     rfinish_file <- tempfile()
     file.create(rfinish_file)
 
-    finish_writing <- writeToFileExpr('Succeed', rfinish_file)
-
-    block <- paste0(code, "; ", expr2str(finish_writing))
-
-    task <- quote(rstudioapi::sendToConsole(block))
-    task[[2]] <- block
-    schedule <- quote(tcltk2::tclTaskSchedule(3000, task))
-    schedule[[3]] <- task
-
     write_pid <- writeToFileExpr(deparse(Sys.getpid() + 0), rsession_pidfile)
 
     write_error <- writeToFileExpr(geterrmessage(), rerror_file)
@@ -60,6 +51,13 @@ start_rstudio_and_inject_code <- function(code){
     error_func[[3]] <- write_error
     error_option <- quote(options(error = error_func))
     error_option[[2]] <- error_func
+
+    finish_writing <- writeToFileExpr('Succeed', rfinish_file)
+    block <- paste0(code, "; ", expr2str(finish_writing))
+    task <- quote(rstudioapi::sendToConsole(block))
+    task[[2]] <- block
+    schedule <- quote(tcltk2::tclTaskSchedule(3000, task))
+    schedule[[3]] <- task
 
     code <- paste(expr2str(write_pid), expr2str(error_option), expr2str(schedule), sep = "; ")
     inject_code(code, file.path(folder, "/Rproj/.Rprofile"))
