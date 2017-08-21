@@ -34,10 +34,15 @@ start_rstudio_and_inject_code <- function(code){
     file.create(rfinish_file)
     finish_writing <- paste0("writeLines('Succeed', '", rfinish_file, "')")
     block <- paste0(code, "; ", finish_writing)
+
+    task <- quote(rstudioapi::sendToConsole(block))
+    task[[2]] <- block
+    schedule <- quote(tcltk2::tclTaskSchedule(3000, task))
+    schedule[[3]] <- task
+
     code <- paste0("writeLines(deparse(Sys.getpid()+0), '", rsession_pidfile, "');
-                   options(error = function(){writeLines(geterrmessage(), '", rerror_file, "')});
-                   tcltk2::tclTaskSchedule(3000,
-                                           rstudioapi::sendToConsole(\"", block, "\"))")
+                   options(error = function(){writeLines(geterrmessage(), '", rerror_file, "')});",
+                   deparse(schedule, width.cutoff = 500))
     inject_code(code, file.path(folder, "/Rproj/.Rprofile"))
     rstudio_pid <- start_and_get_pid(paste0("rstudio ", file.path(folder, "/Rproj/Rproj.Rproj")))
 
