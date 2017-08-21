@@ -1,11 +1,12 @@
 Package: TestWithRStudio
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Testing your R Package with RStudio in Continuous Integration
 Version: 0.1.0
 Authors@R: person("Changcheng Li", email = "cxl508@psu.edu",
     role = c("aut", "cre"))
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: As an R package developer, have you met the situation that your package passes R CMD check but crashes RStudio?
+    TestWithRStudio can help you deal with this situation by testing your R package with RStudio using continuous integration
+    like Travis CI.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
