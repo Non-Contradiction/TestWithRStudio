@@ -1,6 +1,7 @@
 language: julia
 os:
   - linux
+  - osx
 
 notifications:
   email: false
@@ -31,6 +32,10 @@ before_install:
   # but no permalink to release download
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then wget "https://cran.rstudio.com/bin/macosx/$(wget -qO- https://cran.rstudio.com/bin/macosx/ | sed -n 's/.*href="\(R-[^"]*.pkg\)".*/\1/p' | head -n 1)"; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then sudo installer -pkg R-*.pkg -target /; fi
+
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then curl -fLo /tmp/rstudio.dmg https://download1.rstudio.org/rstudio-1.0.153.dmg; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then sudo hdiutil attach /tmp/rstudio.dmg; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export PATH=/Volumes/RStudio-1.0.153/RStudio.app/Contents:$PATH; fi
 
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
