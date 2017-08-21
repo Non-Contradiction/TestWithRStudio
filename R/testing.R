@@ -22,6 +22,17 @@ start_and_get_pid <- function(cmd){
     readLines(pidfile)
 }
 
+writeToFileExpr <- function(x, file_name){
+    basic <- quote(writeLines(x, file_name))
+    basic[[2]] <- substitute(x)
+    basic[[3]] <- file_name
+    basic
+}
+
+expr2str <- function(expr){
+    deparse(expr, width.cutoff = 500)
+}
+
 start_rstudio_and_inject_code <- function(code){
     # folder <- tempdir()
     folder <- "/tmp"
@@ -32,17 +43,25 @@ start_rstudio_and_inject_code <- function(code){
     file.create(rerror_file)
     rfinish_file <- tempfile()
     file.create(rfinish_file)
-    finish_writing <- paste0("writeLines('Succeed', '", rfinish_file, "')")
-    block <- paste0(code, "; ", finish_writing)
+
+    finish_writing <- writeToFileExpr('Succeed', rfinish_file)
+
+    block <- paste0(code, "; ", expr2str(finish_writing))
 
     task <- quote(rstudioapi::sendToConsole(block))
     task[[2]] <- block
     schedule <- quote(tcltk2::tclTaskSchedule(3000, task))
     schedule[[3]] <- task
 
-    code <- paste0("writeLines(deparse(Sys.getpid()+0), '", rsession_pidfile, "');
-                   options(error = function(){writeLines(geterrmessage(), '", rerror_file, "')});",
-                   deparse(schedule, width.cutoff = 500))
+    write_pid <- writeToFileExpr(deparse(Sys.getpid() + 0), rsession_pidfile)
+
+    write_error <- writeToFileExpr(geterrmessage(), rerror_file)
+    error_func <- quote(function()body)
+    error_func[[3]] <- write_error
+    error_option <- quote(options(error = error_func))
+    error_option[[2]] <- error_func
+
+    code <- paste(expr2str(write_pid), expr2str(error_option), expr2str(schedule), sep = "; ")
     inject_code(code, file.path(folder, "/Rproj/.Rprofile"))
     rstudio_pid <- start_and_get_pid(paste0("rstudio ", file.path(folder, "/Rproj/Rproj.Rproj")))
 
