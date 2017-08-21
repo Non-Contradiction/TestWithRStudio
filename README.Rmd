@@ -1,0 +1,64 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# TestWithRStudio for Testing your R Package with RStudio in Continuous Integration
+    
+[![Travis-CI Build Status](https://travis-ci.org/Non-Contradiction/TestWithRStudio.svg?branch=master)](https://travis-ci.org/Non-Contradiction/TestWithRStudio)
+
+## Why do we need `TestWithRStudio`?
+
+As an R package developer, have you met the situation that your package
+passes `R CMD check` but crashes RStudio?
+`TestWithRStudio` can help you deal with this situation by testing your R package with
+RStudio using continuous integration like Travis CI.
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+## Installation
+
+You can get `TestWithRStudio` by
+```{r eval=FALSE}
+devtools::install_github("Non-Contradiction/TestWithRStudio")
+```
+
+## Basic Usage
+```{r}
+library(TestWithRStudio)
+
+check_rstudio()
+
+detailed_check_in_rstudio("1")
+
+detailed_check_in_rstudio("q()")
+
+detailed_check_in_rstudio("stop('This is an error!!')")
+
+detailed_check_in_rstudio("doesntexist()")
+
+detailed_check_in_rstudio("library(TestWithRStudio); crash()")
+```
+
+## TestWithRStudio for R Package Developers
+
+## Suggestion and Issue Reporting
+
+`TestWithRStudio` is under active development now.
+Any suggestion or issue reporting is welcome!
+You may report it using the link: <https://github.com/Non-Contradiction/TestWithRStudio/issues/new>.
+Or email me at <lch34677@gmail.com> or <cxl508@psu.edu>.
+
+
+
+
+
+
+
