@@ -1,4 +1,4 @@
-language: julia
+# language: julia
 os:
   - linux
   - osx
@@ -30,8 +30,8 @@ before_install:
   # osx
   # faster than using homebrew/science tap
   # but no permalink to release download
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then wget "https://cran.rstudio.com/bin/macosx/$(wget -qO- https://cran.rstudio.com/bin/macosx/ | sed -n 's/.*href="\(R-[^"]*.pkg\)".*/\1/p' | head -n 1)"; fi
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then sudo installer -pkg R-*.pkg -target /; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then curl -fLo /tmp/R.pkg https://cran.rstudio.com/bin/macosx/R-3.4.1.pkg; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then sudo installer -pkg /tmp/R.pkg -target /; fi
 
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then curl -fLo /tmp/rstudio.dmg https://download1.rstudio.org/RStudio-1.0.153.dmg; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then sudo hdiutil attach /tmp/rstudio.dmg; fi
