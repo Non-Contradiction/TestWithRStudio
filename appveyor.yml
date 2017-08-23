@@ -25,7 +25,9 @@ install:
   - C:\projects\rstudio.exe /S /D=C:\projects\rstudio
 
 # Download and install texlive binary
-- ps: (new-object net.webclient).DownloadFile("http://mirror.ctan.org/systems/texlive/tlnet/install-tl-windows.exe", "C:\projects\texlive.exe")
+- ps: (new-object net.webclient).DownloadFile(
+   "http://mirror.ctan.org/systems/texlive/tlnet/install-tl-windows.exe",
+   "C:\projects\texlive.exe")
 - C:\projects\texlive.exe /S /D=C:\projects\texlive
 
   - set PATH=C:\projects\R\bin\x64;C:\projects\rstudio\bin;%PATH%
