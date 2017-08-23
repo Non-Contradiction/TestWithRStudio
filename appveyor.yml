@@ -24,11 +24,14 @@ install:
       "C:\projects\rstudio.exe")
   - C:\projects\rstudio.exe /S /D=C:\projects\rstudio
 
-  # Download and install texlive binary
+  # Download miktex portable
+
   - ps: (new-object net.webclient).DownloadFile(
-      "http://mirror.ctan.org/systems/texlive/tlnet/install-tl-windows.exe",
-      "C:\projects\texlive.exe")
-  - C:\projects\texlive.exe /S /D=C:\projects\texlive
+      "http://mirrors.ctan.org/systems/win32/miktex/setup/miktex-portable.exe",
+      "C:\projects\miktex-portable.exe")
+  - 7z x C:\projects\miktex-portable.exe -oC:\miktex >NUL
+  
+  - set "PATH=%PATH%;c:\miktex\texmfs\install\miktex\bin"
 
   - set PATH=C:\projects\R\bin\x64;C:\projects\rstudio\bin;%PATH%
 
