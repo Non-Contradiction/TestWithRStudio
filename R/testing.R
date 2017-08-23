@@ -34,8 +34,8 @@ expr2str <- function(expr){
 }
 
 start_rstudio_and_inject_code <- function(code){
-    # folder <- tempdir()
-    folder <- "/tmp"
+    folder <- tempdir()
+    # folder <- "/tmp"
     create_proj(folder)
     rsession_pidfile <- tempfile()
     file.create(rsession_pidfile)
