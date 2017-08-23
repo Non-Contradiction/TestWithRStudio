@@ -21,6 +21,7 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install -f; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo dpkg -i /tmp/pandoc-1.15.2-1-amd64.deb; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then rm /tmp/pandoc-1.15.2-1-amd64.deb; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install texinfo; fi
 
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then curl -fLo /tmp/rstudio.deb https://download1.rstudio.org/rstudio-1.0.153-amd64.deb; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get install gdebi-core; fi
