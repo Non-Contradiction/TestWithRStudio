@@ -17,7 +17,13 @@ inject_code <- function(code, Rprofile){
 start_and_get_pid <- function(cmd){
     pidfile <- tempfile()
     # print(pidfile)
-    system(paste0(cmd, " & echo $! > ", pidfile), wait = FALSE)
+    if (.Platform$OS.type == "unix") {
+        system(paste0(cmd, " & echo $! > ", pidfile), wait = FALSE)
+    }
+    else {
+        system(paste0("powershell \"$app = start-process ", cmd, " -passthru; echo $app.Id > \"", pidfile))
+    }
+
     Sys.sleep(1) ## wait for the content to write into the pidfile
     readLines(pidfile)
 }
