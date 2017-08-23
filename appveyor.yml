@@ -18,12 +18,17 @@ install:
   - C:\projects\R-binary.exe /VERYSILENT /DIR=C:\projects\R
 
 
-  # Download most recent Julia Windows binary
+  # Download and install the most recent RStudio Windows binary
   - ps: (new-object net.webclient).DownloadFile(
       $env:RSTUDIO_URL,
       "C:\projects\rstudio.exe")
-  # Run installer silently, output to C:\projects\julia
   - C:\projects\rstudio.exe /S /D=C:\projects\rstudio
+
+# Download and install texlive binary
+- ps: (new-object net.webclient).DownloadFile(
+   "http://mirror.ctan.org/systems/texlive/tlnet/install-tl-windows.exe",
+   "C:\projects\texlive.exe")
+- C:\projects\texlive.exe /S /D=C:\projects\texlive
 
   - set PATH=C:\projects\R\bin\x64;C:\projects\rstudio\bin;%PATH%
 
