@@ -9,6 +9,16 @@ check_running <- function(pid){
     length(attr(r, "status")) == 0
 }
 
+terminate <- function(pid){
+    if (.Platform$OS.type == "unix") {
+        system(paste0("kill ", pid), ignore.stderr = TRUE)
+    }
+    else {
+        system(paste0("powershell \"kill ", pid, "\""),
+                    ignore.stderr = TRUE)
+    }
+}
+
 create_proj <- function(folder){
     dir.create(file.path(folder, "/Rproj"), recursive = TRUE, showWarnings = FALSE)
     file.create(file.path(folder, "/Rproj/Rproj.Rproj"))
@@ -115,7 +125,9 @@ detailed_check_in_rstudio <- function(code, time = 20){
     Sys.sleep(time)
 
     crashed <- !check_running(rsession_pid)
-    system(paste0("kill ", rstudio_pid), ignore.stderr = TRUE)
+
+    terminate(rstudio_pid)
+
     finished <- length(readLines(r$rfinish)) == 1 && readLines(r$rfinish) == "Succeed"
     errmsg <- readLines(r$rerror)
 
