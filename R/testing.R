@@ -1,5 +1,10 @@
 check_running <- function(pid){
-    r <- system(paste0("kill -s 0 ", pid), intern = TRUE, ignore.stderr = TRUE, ignore.stdout = TRUE)
+    if (.Platform$OS.type == "unix") {
+        r <- system(paste0("kill -s 0 ", pid), intern = TRUE, ignore.stderr = TRUE, ignore.stdout = TRUE)
+    }
+    else {
+        r <- system(paste0("powershell \"get-process -ID ", pid, "\""))
+    }
     length(attr(r, "status")) == 0
 }
 
