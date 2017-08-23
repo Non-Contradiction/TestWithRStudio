@@ -1,0 +1,49 @@
+environment:
+  matrix:
+  - RSTUDIO_URL: "https://download1.rstudio.org/RStudio-1.0.153.exe"
+
+notifications:
+  - provider: Email
+    on_build_success: false
+    on_build_failure: false
+    on_build_status_changed: false
+
+install:
+  - ps: "[System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12"
+
+# Download and install R binary
+  - ps: |
+      (new-object net.webclient).DownloadString("http://cran.rstudio.com/bin/windows/base/") -match 'href="(R-[0-9.]*[a-zA-Z]*-win.exe)"';
+      (new-object net.webclient).DownloadFile($("http://cran.rstudio.com/bin/windows/base/"+$matches[1]),"C:\projects\R-binary.exe")
+  - C:\projects\R-binary.exe /VERYSILENT /DIR=C:\projects\R
+
+
+  # Download most recent Julia Windows binary
+  - ps: (new-object net.webclient).DownloadFile(
+      $env:RSTUDIO_URL,
+      "C:\projects\rstudio.exe")
+  # Run installer silently, output to C:\projects\julia
+  - C:\projects\rstudio.exe /S /D=C:\projects\rstudio
+
+  - set PATH=C:\projects\rstudio\bin;%PATH%
+
+build_script:
+# Need to convert from shallow to complete for Pkg.clone to work
+#  - IF EXIST .git\shallow (git fetch --unshallow)
+#  - C:\projects\julia\bin\julia -e "versioninfo();
+#      Pkg.clone(pwd(), \"RCall\"); Pkg.build(\"RCall\")"
+
+test_script:
+- Rscript -e 'sessionInfo()'
+- Rscript -e 'install.packages("remotes", repos="http://cran.rstudio.com/")'
+- Rscript -e 'remotes::install_github("Non-Contradiction/TestWithRStudio")'
+- Rscript -e "library(TestWithRStudio); stopifnot(check_rstudio())"
+- Rscript -e "library(TestWithRStudio); stopifnot(check_in_rstudio('1'))"
+- Rscript -e "library(TestWithRStudio); stopifnot(!check_in_rstudio('q()'))"
+- Rscript -e "library(TestWithRStudio); stopifnot(!check_in_rstudio('library(TestWithRStudio); crash()'))"
+- R CMD build .
+- R CMD check *tar.gz
+
+on_finish:
+# uncomment to enable RDP to Appveyor
+# - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
