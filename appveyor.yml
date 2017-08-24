@@ -33,9 +33,20 @@ install:
   - set "PATH=%PATH%;c:\miktex\texmfs\install\miktex\bin"
   # autoinstall latex packages (0=no, 1=autoinstall, 2=ask)
   # this adds this to the registry!
-  - initexmf --set-config-value "[MPM]AutoInstall=1" 
+  - initexmf --set-config-value "[MPM]AutoInstall=1"
 
   - set PATH=C:\projects\R\bin\x64;C:\projects\rstudio\bin;%PATH%
+
+  # Download and install Rtools
+
+  - ps: (new-object net.webclient).DownloadFile(
+      "https://cran.rstudio.com/bin/windows/Rtools/Rtools34.exe",
+      "C:\projects\rtools.exe")
+  - C:\projects\rtools.exe /S /D=C:\Rtools
+
+  - set PATH=C:\projects\R\bin\x64;C:\projects\rstudio\bin;%PATH%
+
+  - set PATH=c:\Rtools\bin;c:\Rtools\gcc-4.6.3\bin;%PATH%
 
 build_script:
 # Need to convert from shallow to complete for Pkg.clone to work
