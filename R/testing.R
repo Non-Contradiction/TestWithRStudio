@@ -11,10 +11,10 @@ check_running <- function(pid){
 
 terminate <- function(pid){
     if (.Platform$OS.type == "unix") {
-        system(paste0("kill ", pid), intern = TRUE, ignore.stderr = TRUE)
+        system(paste0("kill ", pid), ignore.stderr = TRUE)
     }
     else {
-        system(paste0("powershell \"kill ", pid, "\""), intern = TRUE,
+        system(paste0("powershell \"kill ", pid, "\""),
                     ignore.stderr = TRUE)
     }
 }
