@@ -42,7 +42,8 @@ install:
   - ps: (new-object net.webclient).DownloadFile(
       "https://cran.rstudio.com/bin/windows/Rtools/Rtools34.exe",
       "C:\projects\rtools.exe")
-  - C:\projects\rtools.exe /S /D=C:\Rtools
+  # - C:\projects\rtools.exe /S /D=C:\Rtools
+  - C:\projects\rtools.exe /VERYSILENT /DIR=C:\Rtools
 
   - set PATH=C:\projects\R\bin\x64;C:\projects\rstudio\bin;%PATH%
 
