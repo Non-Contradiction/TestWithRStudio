@@ -40,9 +40,6 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then sudo hdiutil attach /tmp/rstudio.dmg; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export PATH=/Volumes/RStudio-1.0.153/RStudio.app/Contents/MacOS:$PATH; fi
 
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; fi
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew outdated fontconfig || brew upgrade fontconfig; fi
-
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then hdiutil unmount juliamnt; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then rm -rf juliamnt; fi
 
