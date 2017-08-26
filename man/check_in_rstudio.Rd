@@ -4,7 +4,7 @@
 \alias{check_in_rstudio}
 \title{Check the code in RStudio.}
 \usage{
-check_in_rstudio(code, time = 20)
+check_in_rstudio(code, time = 30)
 }
 \arguments{
 \item{code}{the code you want to test in RStudio}

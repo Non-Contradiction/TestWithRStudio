@@ -149,7 +149,7 @@ detailed_check_in_rstudio <- function(code, time = 20){
 #' }
 #'
 #' @export
-check_in_rstudio <- function(code, time = 20){
+check_in_rstudio <- function(code, time = 30){
     r <- detailed_check_in_rstudio(code, time)
 
     if (length(r$errmsg) > 0) {
