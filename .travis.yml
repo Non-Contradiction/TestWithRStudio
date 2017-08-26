@@ -47,6 +47,7 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then sudo installer -pkg "/tmp/BasicTex.pkg" -target /; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then rm "/tmp/BasicTex.pkg"; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then sudo tlmgr update --self; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export PATH=/usr/texbin:/Library/TeX/texbin:$PATH; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then sudo tlmgr install inconsolata upquote courier courier-scaled helvetic; fi
 
   - "export DISPLAY=:99.0"
