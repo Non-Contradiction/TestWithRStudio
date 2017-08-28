@@ -59,7 +59,7 @@ build_script:
 - Rscript -e "remotes::install_github(\"Non-Contradiction/TestWithRStudio\")"
 
 test_script:
-- Rscript -e "library(TestWithRStudio); stopifnot(check_rstudio())"
+- Rscript -e "library(TestWithRStudio); check_rstudio()"
 - Rscript -e "library(TestWithRStudio); stopifnot(check_in_rstudio('1'))"
 - Rscript -e "library(TestWithRStudio); stopifnot(!check_in_rstudio('q()'))"
 - Rscript -e "library(TestWithRStudio); stopifnot(!check_in_rstudio('library(TestWithRStudio); crash()'))"
