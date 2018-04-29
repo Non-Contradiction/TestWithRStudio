@@ -10,8 +10,8 @@ Why do we need TestWithRStudio?
 
 <table>
 <colgroup>
-<col width="49%" />
-<col width="50%" />
+<col width="51%" />
+<col width="48%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -43,13 +43,13 @@ Basic Usage
 library(TestWithRStudio)
 
 check_rstudio()
-#> Start a new RStudio process with pid = 44204
-#> The rsession has pid = 44214
+#> Start a new RStudio process with pid = 68568
+#> The rsession has pid = 68578
 #> [1] TRUE
 
 detailed_check_in_rstudio("1")
-#> Start a new RStudio process with pid = 44242
-#> The rsession has pid = 44252
+#> Start a new RStudio process with pid = 68605
+#> The rsession has pid = 68615
 #> $crashed
 #> [1] FALSE
 #> 
@@ -60,9 +60,9 @@ detailed_check_in_rstudio("1")
 #> character(0)
 
 detailed_check_in_rstudio("q()")
-#> Start a new RStudio process with pid = 44280
-#> The rsession has pid = 44290
-#> Warning: 运行命令'kill -s 0 44290 >/dev/null 2>/dev/null'的状态是1
+#> Start a new RStudio process with pid = 68644
+#> The rsession has pid = 68654
+#> Warning: 运行命令'kill -s 0 68654 >/dev/null 2>/dev/null'的状态是1
 #> $crashed
 #> [1] TRUE
 #> 
@@ -73,8 +73,8 @@ detailed_check_in_rstudio("q()")
 #> character(0)
 
 detailed_check_in_rstudio("doesntexist()")
-#> Start a new RStudio process with pid = 44319
-#> The rsession has pid = 44329
+#> Start a new RStudio process with pid = 68682
+#> The rsession has pid = 68692
 #> $crashed
 #> [1] FALSE
 #> 
@@ -86,9 +86,9 @@ detailed_check_in_rstudio("doesntexist()")
 #> [2] ""
 
 detailed_check_in_rstudio("library(TestWithRStudio); crash()")
-#> Start a new RStudio process with pid = 44358
-#> The rsession has pid = 44368
-#> Warning: 运行命令'kill -s 0 44368 >/dev/null 2>/dev/null'的状态是1
+#> Start a new RStudio process with pid = 68719
+#> The rsession has pid = 68729
+#> Warning: 运行命令'kill -s 0 68729 >/dev/null 2>/dev/null'的状态是1
 #> $crashed
 #> [1] TRUE
 #> 

@@ -12,7 +12,7 @@ output: github_document
 ## Why do we need TestWithRStudio?
 
 | Oh, no!!!!! | What's wrong this time!! |
-|---------------------------------------|----------------------------------------|
+|-------------------------------------------|----------------------------------------|
 |![](README/crash.png)| As an R package developer, have you met the situation that your package passes `R CMD check` but crashes RStudio? `TestWithRStudio` can help you deal with this situation by testing your R package with RStudio using continuous integration like Travis CI.|
 
 ```{r, echo = FALSE}
@@ -44,6 +44,10 @@ detailed_check_in_rstudio("doesntexist()")
 
 detailed_check_in_rstudio("library(TestWithRStudio); crash()")
 ```
+
+## How Does TestWithRStudio Work?
+
+
 
 ## TestWithRStudio for R Package Developers
 
